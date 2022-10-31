@@ -3,10 +3,11 @@ import numpy as np
 
 
 def PR(probabilities, ground_truth):
-    rec = np.zeros_like(probabilities)
-    prec = np.zeros_like(probabilities)
-    for i, threshold in enumerate(sorted(probabilities.copy())):
-        pred = probabilities >= threshold
-        rec[i] = m.recall(pred, ground_truth)
-        prec[i] = m.precision(pred, ground_truth)
-    return np.concatenate([[1.], prec]), np.concatenate([[.0], rec])
+	thresholds = np.unique(probabilities)
+	rec = np.zeros_like(thresholds)
+	prec = np.zeros_like(thresholds)
+	for i, threshold in enumerate(sorted(thresholds)):
+		preds = probabilities >= threshold
+		rec[i] = m.recall(preds, ground_truth)
+		prec[i] = m.precision(preds, ground_truth)
+	return np.concatenate([prec, [1.]]), np.concatenate([rec, [.0]])
